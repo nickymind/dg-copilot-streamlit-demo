@@ -1,0 +1,18 @@
+# Privacy Policy
+
+This GPT is an educational and demonstrational tool for Data Governance.
+
+When Actions are enabled, the GPT may send user-provided analytical outputs (structured JSON results derived from uploaded datasets) to an external API endpoint for visualization purposes. This data is:
+
+- Provided explicitly by the user during the session
+- Processed only to store and display governance analysis results
+- Not used for training, profiling, or advertising purposes
+- Not shared with third parties beyond the configured demo infrastructure
+
+No authentication credentials, personal accounts, or proprietary production systems are accessed by this GPT.
+
+All datasets used in the demo are expected to be synthetic or anonymized and intended for educational use only.
+
+The external service does not persist data beyond what is required to demonstrate functionality, and data can be overwritten or removed at any time.
+
+By using this GPT, you acknowledge that you should not upload real personal data or confidential production information.
