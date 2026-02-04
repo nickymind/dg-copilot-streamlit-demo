@@ -53,8 +53,8 @@ FastAPI — DG Analyzer API
    |
    |  GET /governance/latest
    v
-Streamlit — Governance Viewer```
-
+Streamlit — Governance Viewer 
+``` 
 ## Artefacto central: contrato de Data Governance
 
 El núcleo del diseño es un **contrato JSON versionado**, pensado para:
