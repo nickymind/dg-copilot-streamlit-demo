@@ -1,65 +1,140 @@
-# DG Copilot – Data Governance Practical Viewer
+# DG Copilot — Data Governance as Code (AI-Augmented MVP)
 
-Este repositorio implementa un **copiloto práctico de Data Governance** que genera, publica y visualiza metadata de negocio y controles mínimos de gobierno del dato a partir de datasets reales o de ejemplo.
+Este repositorio implementa un **MVP práctico de Data Governance as Code**, con ejecución real end-to-end.
 
-El objetivo es **didáctico y aplicado**: mostrar cómo pasar de datos crudos a un artefacto accionable de Data Governance, alineado a buenas prácticas de la industria.
+El objetivo es demostrar cómo el gobierno del dato puede materializarse como un **artefacto de software consumible**, versionado y observable, en lugar de quedar limitado a documentos o marcos teóricos.
+
+No es un framework académico ni un catálogo completo: es un **patrón mínimo, productizable**, pensado para entornos de datos reales y regulados.
+
+---
+
+## Qué problema aborda
+
+En muchos programas de datos existe una brecha persistente entre:
+
+- **Política de Gobierno** (PDFs, comités, lineamientos), y  
+- **Implementación Técnica** (pipelines, APIs, plataformas).
+
+Este proyecto explora cómo cerrar esa brecha convirtiendo el output de Data Governance en un **contrato técnico explícito**, entendible por humanos y sistemas.
 
 ---
 
 ## Qué resuelve
 
-- Genera **metadata de negocio por campo** (definiciones, sensibilidad, calidad, linaje).
-- Identifica **riesgos de privacidad y compliance** (PII / SPII).
+- Genera **metadata de negocio a nivel campo**, incluyendo:
+  - definiciones
+  - sensibilidad (No-PII / PII / SPII)
+  - reglas de calidad
+  - notas de linaje y uso
+- Identifica **riesgos de privacidad y compliance**.
 - Propone **controles mínimos de Data Governance** accionables.
 - Usa **BIAN como marco de referencia preferido**, sin forzarlo cuando no aplica.
-- Publica y visualiza el resultado en un **viewer web**.
+- Publica el resultado como un **contrato JSON versionado**.
+- Permite consumo **ejecutivo y técnico** mediante API + viewer web.
+
+---
+
+## Qué no es
+
+- No es un data catalog enterprise.
+- No reemplaza herramientas como Collibra, DataHub u OpenMetadata.
+- No define políticas corporativas ni marcos regulatorios formales.
 
 ---
 
 ## Arquitectura (alto nivel)
 
-- **Usuario / GPT**  
-  Genera el análisis de Data Governance en formato JSON.
+```text
+Usuario / GPT
+   |
+   |  (Contrato JSON de Data Governance)
+   v
+FastAPI — DG Analyzer API
+   |
+   |  GET /governance/latest
+   v
+Streamlit — Governance Viewer
 
-- **FastAPI (DG Analyzer API)**  
-  Recibe, persiste y expone el último análisis.
+## Artefacto central: contrato de Data Governance
 
-- **Streamlit Viewer**  
-  Visualiza resumen, metadata por campo, controles y JSON completo.
+El núcleo del diseño es un **contrato JSON versionado**, pensado para:
 
----
+- lectura humana clara,
+- validación técnica,
+- integración futura con catálogos o pipelines.
 
-## Contrato de datos (analysis)
+### Esquema actual
 
-El viewer consume un objeto `analysis` con el siguiente esquema estable (`v1`):
+```json
+{
+  "analysis_schema_version": "v1",
+  "resumen": { ... },
+  "campos_metadata": [ ... ],
+  "controles": { ... }
+}
 
-- `analysis_schema_version` (string, `"v1"`)
-- `resumen` (object)
-- `campos_metadata` (array de objects)
-- `controles` (object)
 
-Este contrato es explícito y versionado para evitar roturas futuras.
-
----
-
-## Uso típico
-
-1. Generar un análisis de Data Governance (manual o vía GPT).
-2. Publicarlo en la API (`/governance/analyze`).
-3. Visualizar el último análisis en el Streamlit Viewer.
-
----
-
-## Contexto de uso
-
-- Curso de **Data Governance / Data Management**.
-- Ejercicio práctico de catalogación de datos.
-- Demo conceptual de “Data Governance as a Product”.
-- Portfolio técnico-profesional.
+**Por qué así**
+- `##` porque es core
+- `### Esquema actual` porque es detalle técnico
+- El JSON da señal inmediata de ingeniería
 
 ---
 
-## Nota
+## 2) **Cómo explorarlo**
 
-Este proyecto **no reemplaza asesoramiento legal o regulatorio**.
-Los controles propuestos son mínimos y orientativos, pensados para enseñanza y discusión técnica.
+También es **sección principal**, pero con sub-opciones claras.
+
+```md
+## Cómo explorarlo
+
+### Viewer web (recomendado)
+
+Permite revisar el último análisis publicado, con foco ejecutivo y técnico.
+
+👉 https://dg-copilot-app-demo.streamlit.app/
+
+### Ejecución local
+
+```bash
+git clone https://github.com/nickymind/dg-copilot-streamlit-demo
+cd dg-copilot-streamlit-demo
+pip install -r requirements.txt
+streamlit run app.py
+
+
+**Por qué así**
+- Evita frustración
+- Separa público ejecutivo vs técnico
+- No obliga a nadie a “correr cosas”
+
+---
+
+## 3) **ADR — Architecture Decision Record**
+
+Esto es **oro senior**, pero tiene que ser sobrio.
+
+```md
+## ADR — Architecture Decision Record
+
+### ADR-001: Data Governance como contrato JSON versionado
+
+**Estado:** Accepted
+
+**Contexto**  
+Las iniciativas de Data Governance suelen fallar cuando el conocimiento queda encapsulado en documentos no integrables con la plataforma de datos.
+
+**Decisión**  
+Representar el output de Data Governance como un **contrato JSON explícito, schema-first y versionado**.
+
+**Justificación**
+- Permite enforcement técnico.
+- Reduce ambigüedad entre negocio y tecnología.
+- Es agnóstico a vendors.
+- Habilita CI/CD, validaciones y evolución controlada.
+
+**Consecuencias**
+- El gobierno del dato se vuelve observable.
+- Se facilita la integración progresiva con plataformas reales.
+- Se evita lock-in prematuro.
+
