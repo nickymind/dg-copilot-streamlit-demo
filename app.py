@@ -113,17 +113,17 @@ with tabs[1]:
     fields = pick_first(
         analysis,
         [
-            "campos_metadata",      # ← CLAVE REAL (primero)
+            "campos_metadata",      # contrato real
             "metadata_campos",
             "campos",
             "fields",
             "field_metadata",
-            "metadata"
+            "metadata",
         ],
         default=[]
     )
 
-    # Normalizar si viene como dict (ej: {field_name: {...}})
+    # Normalizar dict -> list
     if isinstance(fields, dict):
         fields = [
             {"field_name": k, **v} if isinstance(v, dict)
@@ -131,11 +131,39 @@ with tabs[1]:
             for k, v in fields.items()
         ]
 
-    if isinstance(fields, list) and fields:
-        st.dataframe(fields, use_container_width=True)
-    else:
+    # Si no es lista, mostrar crudo
+    if not (isinstance(fields, list) and fields):
         st.info("No se encontró metadata de campos como lista/dict en claves conocidas.")
         st.json(fields)
+    else:
+        # ---- Arrow-safe dataframe: serializar listas/dicts a string ----
+        def _to_cell(v):
+            if v is None:
+                return ""
+            if isinstance(v, (list, dict)):
+                try:
+                    return json.dumps(v, ensure_ascii=False)
+                except Exception:
+                    return str(v)
+            return v
+
+        safe_rows = []
+        for row in fields:
+            if isinstance(row, dict):
+                safe_rows.append({k: _to_cell(v) for k, v in row.items()})
+            else:
+                safe_rows.append({"value": _to_cell(row)})
+
+        st.dataframe(safe_rows, use_container_width=True)
+
+        # Opcional: vista detallada por campo (mejor UX)
+        st.divider()
+        st.caption("Detalle por campo")
+        for row in fields:
+            if isinstance(row, dict):
+                with st.expander(row.get("field_name", "campo")):
+                    st.json(row)
+
 
 with tabs[2]:
     st.subheader("Controles mínimos de Data Governance")
