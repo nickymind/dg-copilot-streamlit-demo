@@ -75,19 +75,9 @@ El núcleo del diseño es un **contrato JSON versionado**, pensado para:
 }
 ```
 
-**Por qué así**
-- `##` porque es core
-- `### Esquema actual` porque es detalle técnico
-- El JSON da señal inmediata de ingeniería
-
 ---
 
 ## 2) **Cómo explorarlo**
-
-También es **sección principal**, pero con sub-opciones claras.
-
-```
-## Cómo explorarlo
 
 ### Viewer web (recomendado)
 
@@ -104,19 +94,9 @@ pip install -r requirements.txt
 streamlit run app.py
 
 ```
-**Por qué así**
-- Evita frustración
-- Separa público ejecutivo vs técnico
-- No obliga a nadie a “correr cosas”
-
 ---
 
 ## 3) **ADR — Architecture Decision Record**
-
-Esto es **oro senior**, pero tiene que ser sobrio.
-
-```
-## ADR — Architecture Decision Record
 
 ### ADR-001: Data Governance como contrato JSON versionado
 
