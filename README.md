@@ -53,7 +53,7 @@ FastAPI — DG Analyzer API
    |
    |  GET /governance/latest
    v
-Streamlit — Governance Viewer
+Streamlit — Governance Viewer```
 
 ## Artefacto central: contrato de Data Governance
 
