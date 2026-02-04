@@ -100,8 +100,6 @@ streamlit run app.py
 
 ### ADR-001: Data Governance como contrato JSON versionado
 
-**Estado:** Accepted
-
 **Contexto**  
 Las iniciativas de Data Governance suelen fallar cuando el conocimiento queda encapsulado en documentos no integrables con la plataforma de datos.
 
