@@ -18,20 +18,14 @@ El objetivo es **didáctico y aplicado**: mostrar cómo pasar de datos crudos a 
 
 ## Arquitectura (alto nivel)
 
-Usuario / GPT
-|
-| (JSON de Data Governance)
-v
-FastAPI (DG Analyzer API)
-|
-| /governance/latest
-v
-Streamlit Viewer
+- **Usuario / GPT**  
+  Genera el análisis de Data Governance en formato JSON.
 
+- **FastAPI (DG Analyzer API)**  
+  Recibe, persiste y expone el último análisis.
 
-- **GPT / Copilot**: genera el análisis de Data Governance.
-- **API (FastAPI)**: recibe y persiste el análisis como contrato JSON.
-- **Viewer (Streamlit)**: muestra Resumen, Metadata por campo, Controles y JSON completo.
+- **Streamlit Viewer**  
+  Visualiza resumen, metadata por campo, controles y JSON completo.
 
 ---
 
