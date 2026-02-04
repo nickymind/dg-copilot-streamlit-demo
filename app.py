@@ -85,37 +85,70 @@ st.divider()
 # ======================
 # Tabs
 # ======================
-tabs = st.tabs(
-    ["Resumen", "Campos (metadata)", "Controles", "JSON completo"]
-)
+tabs = st.tabs(["Resumen", "Campos (metadata)", "Controles", "JSON completo"])
+
+def pick_first(d, keys, default=None):
+    for k in keys:
+        if isinstance(d, dict) and k in d and d[k] not in (None, "", [], {}):
+            return d[k]
+    return default
 
 with tabs[0]:
     st.subheader("Resumen ejecutivo")
-    resumen = analysis.get("resumen_ejecutivo", {})
-    if resumen:
+    resumen = pick_first(
+        analysis,
+        ["resumen_ejecutivo", "resumen", "executive_summary", "summary"],
+        default={}
+    )
+    if isinstance(resumen, dict) and resumen:
         st.json(resumen)
     else:
-        st.info("No se encontró `resumen_ejecutivo`.")
+        st.info("No se encontró resumen en claves conocidas.")
+        st.json(resumen if resumen else analysis)
 
 with tabs[1]:
     st.subheader("Metadata a nivel campo")
-    fields = analysis.get("metadata_campos", [])
+    fields = pick_first(
+        analysis,
+        ["metadata_campos", "campos", "fields", "field_metadata", "metadata"],
+        default=[]
+    )
+
+    # Normalizar si viene como dict (por ejemplo {field_name: {...}})
+    if isinstance(fields, dict):
+        fields = [{"field_name": k, **v} if isinstance(v, dict) else {"field_name": k, "value": v}
+                  for k, v in fields.items()]
+
     if isinstance(fields, list) and fields:
         st.dataframe(fields, use_container_width=True)
     else:
-        st.info("No se encontró `metadata_campos` como lista.")
+        st.info("No se encontró metadata de campos como lista/dict en claves conocidas.")
+        st.json(fields)
 
 with tabs[2]:
     st.subheader("Controles mínimos de Data Governance")
-    controles = analysis.get("controles_gobierno_minimo", {})
-    if controles:
+    controles = pick_first(
+        analysis,
+        ["controles_gobierno_minimo", "controles", "minimum_controls", "governance_controls"],
+        default={}
+    )
+    if isinstance(controles, dict) and controles:
         st.json(controles)
     else:
-        st.info("No se encontró `controles_gobierno_minimo`.")
+        st.info("No se encontraron controles en claves conocidas.")
+        st.json(controles if controles else analysis)
 
 with tabs[3]:
     st.subheader("JSON completo")
     st.json(analysis)
+
+    json_bytes = json.dumps(analysis, ensure_ascii=False, indent=2).encode("utf-8")
+    st.download_button(
+        label="Descargar JSON",
+        data=json_bytes,
+        file_name=f"dg_analysis_{dataset}_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json",
+        mime="application/json",
+    )    st.json(analysis)
 
     json_bytes = json.dumps(
         analysis, ensure_ascii=False, indent=2
