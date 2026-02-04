@@ -54,8 +54,8 @@ FastAPI — DG Analyzer API
    |  GET /governance/latest
    v
 Streamlit — Governance Viewer 
-```md
-
+```
+	
 ## Artefacto central: contrato de Data Governance
 
 El núcleo del diseño es un **contrato JSON versionado**, pensado para:
@@ -73,7 +73,7 @@ El núcleo del diseño es un **contrato JSON versionado**, pensado para:
   "campos_metadata": [ ... ],
   "controles": { ... }
 }
-```md
+```
 
 **Por qué así**
 - `##` porque es core
@@ -86,7 +86,7 @@ El núcleo del diseño es un **contrato JSON versionado**, pensado para:
 
 También es **sección principal**, pero con sub-opciones claras.
 
-```md
+```
 ## Cómo explorarlo
 
 ### Viewer web (recomendado)
@@ -103,7 +103,7 @@ cd dg-copilot-streamlit-demo
 pip install -r requirements.txt
 streamlit run app.py
 
-```md
+```
 **Por qué así**
 - Evita frustración
 - Separa público ejecutivo vs técnico
@@ -115,7 +115,7 @@ streamlit run app.py
 
 Esto es **oro senior**, pero tiene que ser sobrio.
 
-```md
+```
 ## ADR — Architecture Decision Record
 
 ### ADR-001: Data Governance como contrato JSON versionado
