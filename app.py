@@ -95,29 +95,41 @@ def pick_first(d, keys, default=None):
 
 with tabs[0]:
     st.subheader("Resumen ejecutivo")
+
     resumen = pick_first(
         analysis,
-        ["resumen_ejecutivo", "resumen", "executive_summary", "summary"],
-        default={}
+        ["resumen", "resumen_ejecutivo", "executive_summary", "summary"],
+        default=None
     )
+
     if isinstance(resumen, dict) and resumen:
         st.json(resumen)
     else:
-        st.info("No se encontró resumen en claves conocidas.")
-        st.json(resumen if resumen else analysis)
+        st.info("No se encontró resumen estructurado.")
 
 with tabs[1]:
     st.subheader("Metadata a nivel campo")
+
     fields = pick_first(
         analysis,
-        ["metadata_campos", "campos", "fields", "field_metadata", "metadata"],
+        [
+            "campos_metadata",      # ← CLAVE REAL (primero)
+            "metadata_campos",
+            "campos",
+            "fields",
+            "field_metadata",
+            "metadata"
+        ],
         default=[]
     )
 
-    # Normalizar si viene como dict (por ejemplo {field_name: {...}})
+    # Normalizar si viene como dict (ej: {field_name: {...}})
     if isinstance(fields, dict):
-        fields = [{"field_name": k, **v} if isinstance(v, dict) else {"field_name": k, "value": v}
-                  for k, v in fields.items()]
+        fields = [
+            {"field_name": k, **v} if isinstance(v, dict)
+            else {"field_name": k, "value": v}
+            for k, v in fields.items()
+        ]
 
     if isinstance(fields, list) and fields:
         st.dataframe(fields, use_container_width=True)
@@ -127,16 +139,17 @@ with tabs[1]:
 
 with tabs[2]:
     st.subheader("Controles mínimos de Data Governance")
+
     controles = pick_first(
         analysis,
-        ["controles_gobierno_minimo", "controles", "minimum_controls", "governance_controls"],
-        default={}
+        ["controles", "controles_gobierno_minimo", "governance_controls", "minimum_controls"],
+        default=None
     )
+
     if isinstance(controles, dict) and controles:
         st.json(controles)
     else:
-        st.info("No se encontraron controles en claves conocidas.")
-        st.json(controles if controles else analysis)
+        st.info("No se encontraron controles estructurados.")
 
 with tabs[3]:
     st.subheader("JSON completo")
