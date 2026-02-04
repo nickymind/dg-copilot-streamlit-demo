@@ -142,14 +142,6 @@ with tabs[3]:
     st.subheader("JSON completo")
     st.json(analysis)
 
-    json_bytes = json.dumps(analysis, ensure_ascii=False, indent=2).encode("utf-8")
-    st.download_button(
-        label="Descargar JSON",
-        data=json_bytes,
-        file_name=f"dg_analysis_{dataset}_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json",
-        mime="application/json",
-    )    st.json(analysis)
-
     json_bytes = json.dumps(
         analysis, ensure_ascii=False, indent=2
     ).encode("utf-8")
@@ -160,4 +152,5 @@ with tabs[3]:
         file_name=f"dg_analysis_{dataset}_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json",
         mime="application/json",
     )
+
 
