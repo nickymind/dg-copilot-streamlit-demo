@@ -54,7 +54,8 @@ FastAPI — DG Analyzer API
    |  GET /governance/latest
    v
 Streamlit — Governance Viewer 
-``` 
+```md
+
 ## Artefacto central: contrato de Data Governance
 
 El núcleo del diseño es un **contrato JSON versionado**, pensado para:
@@ -72,7 +73,7 @@ El núcleo del diseño es un **contrato JSON versionado**, pensado para:
   "campos_metadata": [ ... ],
   "controles": { ... }
 }
-
+```md
 
 **Por qué así**
 - `##` porque es core
@@ -102,7 +103,7 @@ cd dg-copilot-streamlit-demo
 pip install -r requirements.txt
 streamlit run app.py
 
-
+```md
 **Por qué así**
 - Evita frustración
 - Separa público ejecutivo vs técnico
